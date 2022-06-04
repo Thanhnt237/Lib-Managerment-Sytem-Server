@@ -3,16 +3,17 @@ import _ from "lodash";
 import * as logger from "winston";
 import {constants} from './constants'
 
-export async function query(str_sql: String): Promise<any> {
+export async function query(str_sql: string): Promise<any> {
     try {
         const [rows, fields] = await conn.query<any>(str_sql.toString())
         return [rows, fields];
     } catch (error: any) {
-        throw {  message : `${error.message}. ${error.sqlMessage}` }
+        logger.error(`query error : ${error.message}`)
+        return {  message : `${error.message}. ${error.sqlMessage}` }
     }
 }
 
-export async function genInsertQuery (tableName: String, arrProps: Array<String>, data: Array<any>, is_IGNORE:boolean): Promise<string> {
+export function genInsertQuery (tableName: string, arrProps: Array<string>, data: Array<any>, is_IGNORE?:boolean): string {
     let data_insert = [];
     let sql = "";
 
@@ -47,7 +48,7 @@ export async function genInsertQuery (tableName: String, arrProps: Array<String>
     return sql;
 }
 
-export function check_data (data:any, check_field:any, rule:any, line:any){
+export function check_data (data:any, check_field:any, rule:any, line?:any){
 
     let result:any = {status : "OK"};
     rule = !rule ? constants.ERROR_CODE_EMPTY : rule;
@@ -127,7 +128,7 @@ export function check_data (data:any, check_field:any, rule:any, line:any){
  * param {* required require} {removeAfterValid}
  */
 
-export async function validFragment(data: Array<any>, columnStandard: Array<Object>): Promise<Object>{
+export async function validFragment(data: Array<any>, columnStandard: Object): Promise<Array<any>>{
     try {
         let columnRequired = [];
         let columnOmit = [];
@@ -142,7 +143,7 @@ export async function validFragment(data: Array<any>, columnStandard: Array<Obje
             }
         }
 
-        check_data(data, columnRequired, constants.ERROR_CODE_EMPTY, null)
+        check_data(data, columnRequired, constants.ERROR_CODE_EMPTY)
 
         for (let i=0;i<data.length;i++){
             data[i] = _.pick(data[i], Object.keys(columnStandard))
@@ -153,7 +154,63 @@ export async function validFragment(data: Array<any>, columnStandard: Array<Obje
 
         return data
     }catch (error: any) {
-        logger.error(`${arguments.callee.name} error : ${error.message}`)
+        logger.error(`validFragment error : ${error.message}`)
         throw {status : "KO", ...error, message : error.message}
     }
+}
+
+/**
+ *
+ * @param {*} tableName Ten banr
+ * @param {*} data {column:"Value"}
+ * @param {*} condition {column:"value"}
+ * @returns
+ */
+export function genUpdateQuery(tableName: string, data: Array<any>, condition: any){
+    let sql = `update ${tableName} set `
+    for (let key in data){
+        let column,value
+        column = key
+        value = data[key]
+        if (typeof value != "undefined" && value != null) {
+            sql +=`${key} = '${value}',`
+        }
+    }
+    let conditionArr = []
+    for (let con in condition){
+        let column,value
+        column = con
+        value = condition[con]
+        conditionArr.push(` ${column} = '${value}' `)
+    }
+    sql = sql.slice(0, sql.length -1)
+    sql += ` where ${conditionArr.join("AND")};`
+    if (typeof data === "object") return ""
+    return sql
+}
+
+/**
+ * TODO: generate string id
+ * @param {*} prefix : tiền tố .
+ */
+export function genID(prefix: string,  maxSize:number = 45) {
+    if (prefix) {
+        maxSize = maxSize - prefix.length - 1;
+    }
+    let current_time = new Date().getTime();
+    let rand = Math.floor(Math.random() * (Math.floor(Math.random() * 1000) - Math.floor(Math.random() * 100) + 600) + Math.floor(Math.random() * 100));
+    let s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + (current_time * rand);
+    let result;
+
+    let str = Array(maxSize).join().split(',').map(function () { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+    if (!!prefix) {
+
+        result = `${prefix.toLocaleUpperCase()}_${str}`;
+    } else {
+        result = `${str}`;
+    }
+
+    return result;
+
+
 }
