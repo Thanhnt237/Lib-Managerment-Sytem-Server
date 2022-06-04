@@ -1,15 +1,16 @@
-import {TABLE_NAME} from "./tablename";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tablename_1 = require("./tablename");
 module.exports = `
 -- DROP DATABASE IF EXISTS \`##database_name##\`;
 -- CREATE DATABASE IF NOT EXISTS \`##database_name##\` character set UTF8 collate utf8_bin;
 
 -- use \`##database_name##\`;
 
-CREATE TABLE IF NOT EXISTS ${TABLE_NAME.NGUOI_DUNG}(
+CREATE TABLE IF NOT EXISTS ${tablename_1.TABLE_NAME.NGUOI_DUNG}(
     ID varchar(20),
     TEN_NGUOI_DUNG text charset utf8mb4,
-    ROLE varchar(30) default 'MEMBER',
+    ROLE text charset utf8mb4 default 'MEMBER',
     USERNAME varchar(50),
     PASSWORD varchar(200),
     NGAY_KHOI_TAO bigint,
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS ${TABLE_NAME.NGUOI_DUNG}(
     primary key (ID)
 );
 
-CREATE TABLE IF NOT EXISTS ${TABLE_NAME.PHONG_DOC}(
+CREATE TABLE IF NOT EXISTS ${tablename_1.TABLE_NAME.PHONG_DOC}(
     ID varchar(20),
     TEN_PHONG_DOC text charset utf8mb4,
     NGAY_KHOI_TAO bigint,
