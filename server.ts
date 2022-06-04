@@ -36,7 +36,7 @@ app.use(function(error: any, req: any, res:any, next: any) {
 });
 
 
-// app.all('/*', [require('./middlewares/normal')]);
+// app.all('/api/resources/*', [require('./routes/routesGuard')]);
 
 app.use('/', require('./routes'));
 
