@@ -19,3 +19,7 @@ __exportStar(require("./common_interface"), exports);
 __exportStar(require("./vendors"), exports);
 __exportStar(require("./nguoi_dung_interface"), exports);
 __exportStar(require("./phong_doc_interface"), exports);
+__exportStar(require("./sach_interface"), exports);
+__exportStar(require("./tac_gia_interface"), exports);
+__exportStar(require("./danh_muc_sach_interface"), exports);
+__exportStar(require("./ke_sach_interface"), exports);

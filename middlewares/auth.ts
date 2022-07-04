@@ -5,17 +5,15 @@ import {TABLE_NAME} from "../config/tablename";
 import * as common from '../app/common/common_function'
 
 export async function verifyToken(token: string): Promise<string>{
-    token = token.split(' ')[1];
-
     try {
         let payload: any = jwt.verify(token, constants.ACCESS_TOKEN_SECRET);
         // console.log(payload)
         if(!payload){
-            throw {message: "Invalid token", error_code: constants.ERROR_CODE_INVALID_VALUE}
+            throw {status: 403, message: "Invalid token", error_code: constants.ERROR_CODE_INVALID_VALUE}
         }
 
         if (!payload.user) {
-            throw {message: "Invalid token", error_code: constants.ERROR_CODE_INVALID_VALUE}
+            throw {status: 403, message: "Invalid token", error_code: constants.ERROR_CODE_INVALID_VALUE}
         }
 
         return payload.user
@@ -52,6 +50,7 @@ export async function refreshToken(refreshToken: string): Promise<string>{
     let userId: string = '';
 
     try {
+
         let payload : any = jwt.verify(refreshToken, constants.REFRESH_TOKEN_SECRET);
 
         if(!payload){

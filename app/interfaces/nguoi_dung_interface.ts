@@ -4,7 +4,7 @@ export interface NguoiDung {
     ROLE: string
     USERNAME: string
     PASSWORD: string
-    NGAY_KHOI_TAO?: string,
+    NGAY_KHOI_TAO?: number,
     KHOA?: boolean,
-    TRANG_THAI?: boolean,
+    TRANG_THAI?: boolean
 }

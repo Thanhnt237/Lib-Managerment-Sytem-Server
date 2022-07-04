@@ -4,7 +4,22 @@ import {BasicReturn, PhongDoc} from "../interfaces";
 import {constants} from "../common/constants";
 import * as logger from "winston";
 
-export async function layPhongDoc(input: Object): Promise<Object>{
+export async function layPhongDSDoc(input: any): Promise<BasicReturn>{
+    return await phongDocRepository.layPhongDoc(input)
+}
+
+export async function layPhongDocTheoKeSach(input: any): Promise<BasicReturn>{
+    return await phongDocRepository.layPhongDocTheoKeSach(input);
+}
+
+export async function layChiTietPhongDoc(input: any): Promise<BasicReturn>{
+    try{
+        common.check_data(input, ["PHONG_DOC_ID"], constants.ERROR_CODE_EMPTY)
+    }catch(error: any){
+        logger.error(`layChiTietPhongDoc error : ${error.message}`)
+        return {status: "KO", ...error}
+    }
+
     return await phongDocRepository.layPhongDoc(input)
 }
 
@@ -19,7 +34,8 @@ export async function themPhongDoc(input: any): Promise<BasicReturn>{
 
     let phongDocInputStandard: PhongDoc = {
         ID: "*",
-        TEN_PHONG_DOC: "*"
+        TEN_PHONG_DOC: "*",
+        NGAY_KHOI_TAO: 0
     }
 
     data = data.map((c: any) => {
@@ -42,14 +58,15 @@ export async function themPhongDoc(input: any): Promise<BasicReturn>{
 export async function suaPhongDoc(input: PhongDoc): Promise<BasicReturn>{
     let phongDocInputStandard: PhongDoc = {
         ID: "* removeAfterValid",
-        TEN_PHONG_DOC: ""
+        TEN_PHONG_DOC: "",
+        TRANG_THAI: true
     }
 
     try{
         let standardData: Array<PhongDoc> = await common.validFragment([input], phongDocInputStandard)
         return await phongDocRepository.suaPhongDoc({data: standardData, condition: {ID: input.ID}})
     }catch(error: any){
-        logger.error(`themPhongDoc error : ${error.message}`)
+        logger.error(`suaPhongDoc error : ${error.message}`)
         return {status: "KO", ...error}
     }
 }

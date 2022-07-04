@@ -9,6 +9,10 @@ export async function layChiTietNguoiDung(input: NguoiDung): Promise<BasicReturn
     return await nguoiDungRepository.layChiTietNguoiDung(input)
 }
 
+export async function layDSNguoiDung(input: any): Promise<BasicReturn>{
+    return await nguoiDungRepository.layDSNguoiDung(input)
+}
+
 export async function dangNhap(input: NguoiDung): Promise<BasicReturn> {
     try{
         common.check_data(input, ["USERNAME", "PASSWORD"], constants.ERROR_CODE_EMPTY)
@@ -38,7 +42,7 @@ export async function dangNhap(input: NguoiDung): Promise<BasicReturn> {
 
 export async function refreshToken(input: any): Promise<BasicReturn> {
     let {refresh_token} = input;
-
+    // console.log(input)
     try{
         common.check_data(input, ["refresh_token"], constants.ERROR_CODE_EMPTY)
         let token = await auth.refreshToken(refresh_token)
@@ -63,7 +67,8 @@ export async function themNguoiDung(input: any): Promise<BasicReturn>{
         TEN_NGUOI_DUNG: "*",
         ROLE: "",
         USERNAME: "",
-        PASSWORD: ""
+        PASSWORD: "",
+        NGAY_KHOI_TAO: 0
     }
 
     data = data.map((c: any) => {
@@ -83,13 +88,14 @@ export async function themNguoiDung(input: any): Promise<BasicReturn>{
     }
 }
 
-export async function suaNguoiDung(input: NguoiDung): Promise<BasicReturn>{
+export async function suaNguoiDung(input: NguoiDung): Promise<BasicReturn>{    
     let nguoiDungInputStandard: NguoiDung = {
         ID: "* removeAfterValid",
-        TEN_NGUOI_DUNG: "*",
+        TEN_NGUOI_DUNG: "",
         ROLE: "",
         USERNAME: "",
-        PASSWORD: ""
+        PASSWORD: "",
+        TRANG_THAI: true
     }
 
     try{

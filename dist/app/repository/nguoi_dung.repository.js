@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.suaNguoiDung = exports.themNguoiDung = exports.layChiTietNguoiDung = void 0;
+exports.suaNguoiDung = exports.themNguoiDung = exports.layDSNguoiDung = exports.layChiTietNguoiDung = void 0;
 const common = __importStar(require("../common/common_function"));
 const tablename_1 = require("../../config/tablename");
 const constants_1 = require("../common/constants");
@@ -69,6 +69,24 @@ function layChiTietNguoiDung(input) {
     });
 }
 exports.layChiTietNguoiDung = layChiTietNguoiDung;
+function layDSNguoiDung(input) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let sql = `
+        select * 
+        from ${tablename_1.TABLE_NAME.NGUOI_DUNG}
+        where !KHOA and TRANG_THAI
+    `;
+        try {
+            let [result] = yield common.query(sql);
+            return { status: "OK", result: result };
+        }
+        catch (error) {
+            logger.error(`layDSNguoiDung error : ${error.message}`);
+            return Object.assign({ status: "KO" }, error);
+        }
+    });
+}
+exports.layDSNguoiDung = layDSNguoiDung;
 function themNguoiDung(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let arrProps = Object.keys(input[0]);
@@ -88,7 +106,10 @@ exports.themNguoiDung = themNguoiDung;
 function suaNguoiDung(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let { data, condition } = input;
-        let sql = common.genUpdateQuery(tablename_1.TABLE_NAME.NGUOI_DUNG, data, condition);
+        let sql = "";
+        data.forEach((item) => {
+            sql += common.genUpdateQuery(tablename_1.TABLE_NAME.NGUOI_DUNG, data, condition);
+        });
         console.log(sql);
         try {
             yield common.query(sql);

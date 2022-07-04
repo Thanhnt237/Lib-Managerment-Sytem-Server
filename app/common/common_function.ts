@@ -166,7 +166,7 @@ export async function validFragment(data: Array<any>, columnStandard: Object): P
  * @param {*} condition {column:"value"}
  * @returns
  */
-export function genUpdateQuery(tableName: string, data: Array<any>, condition: any){
+export function genUpdateQuery(tableName: string, data: any, condition: any){
     let sql = `update ${tableName} set `
     for (let key in data){
         let column,value
@@ -185,7 +185,7 @@ export function genUpdateQuery(tableName: string, data: Array<any>, condition: a
     }
     sql = sql.slice(0, sql.length -1)
     sql += ` where ${conditionArr.join("AND")};`
-    if (typeof data === "object") return ""
+    if (typeof data !== "object" || !Object.keys(data).length) return ""
     return sql
 }
 

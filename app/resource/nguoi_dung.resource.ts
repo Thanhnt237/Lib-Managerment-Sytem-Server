@@ -5,11 +5,17 @@ export async function layChiTietNguoiDung(req:iRequest, res:iResponse){
     res.json(await nguoiDungService.layChiTietNguoiDung(req.body))
 }
 
+export async function layDSNguoiDung(req: iRequest, res: iResponse){
+    res.json(await nguoiDungService.layDSNguoiDung(req.body))
+}
+
 export async function dangNhap(req: iRequest, res: iResponse){
+    // console.log(await nguoiDungService.dangNhap(req.body))
     res.json(await nguoiDungService.dangNhap(req.body))
 }
 
 export async function refreshToken(req: iRequest, res: iResponse){
+    // console.log(req.body)
     res.json(await nguoiDungService.refreshToken(req.body))
 }
 

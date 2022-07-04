@@ -32,17 +32,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.suaPhongDoc = exports.themPhongDoc = exports.layPhongDoc = void 0;
+exports.suaPhongDoc = exports.themPhongDoc = exports.layChiTietPhongDoc = exports.layPhongDSDoc = void 0;
 const phongDocRepository = __importStar(require("../repository/phong_doc.repository"));
 const common = __importStar(require("../common/common_function"));
 const constants_1 = require("../common/constants");
 const logger = __importStar(require("winston"));
-function layPhongDoc(input) {
+function layPhongDSDoc(input) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield phongDocRepository.layPhongDoc(input);
     });
 }
-exports.layPhongDoc = layPhongDoc;
+exports.layPhongDSDoc = layPhongDSDoc;
+function layChiTietPhongDoc(input) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            common.check_data(input, ["PHONG_DOC_ID"], constants_1.constants.ERROR_CODE_EMPTY);
+        }
+        catch (error) {
+            logger.error(`layChiTietPhongDoc error : ${error.message}`);
+            return Object.assign({ status: "KO" }, error);
+        }
+        return yield phongDocRepository.layPhongDoc(input);
+    });
+}
+exports.layChiTietPhongDoc = layChiTietPhongDoc;
 function themPhongDoc(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let { data } = input;
@@ -54,7 +67,8 @@ function themPhongDoc(input) {
         }
         let phongDocInputStandard = {
             ID: "*",
-            TEN_PHONG_DOC: "*"
+            TEN_PHONG_DOC: "*",
+            NGAY_KHOI_TAO: 0
         };
         data = data.map((c) => {
             return Object.assign(Object.assign({}, c), { ID: common.genID("P", 20), NGAY_KHOI_TAO: (new Date()).getTime() });
@@ -74,14 +88,15 @@ function suaPhongDoc(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let phongDocInputStandard = {
             ID: "* removeAfterValid",
-            TEN_PHONG_DOC: ""
+            TEN_PHONG_DOC: "",
+            TRANG_THAI: true
         };
         try {
             let standardData = yield common.validFragment([input], phongDocInputStandard);
             return yield phongDocRepository.suaPhongDoc({ data: standardData, condition: { ID: input.ID } });
         }
         catch (error) {
-            logger.error(`themPhongDoc error : ${error.message}`);
+            logger.error(`suaPhongDoc error : ${error.message}`);
             return Object.assign({ status: "KO" }, error);
         }
     });

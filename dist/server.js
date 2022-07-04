@@ -8,10 +8,12 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const process_1 = __importDefault(require("process"));
 const morgan_1 = __importDefault(require("morgan"));
 const compression_1 = __importDefault(require("compression"));
+const cors_1 = __importDefault(require("cors"));
 require('dotenv').config();
 const app = (0, express_1.default)();
 // Compress all HTTP responses
 app.use((0, compression_1.default)());
+app.use((0, cors_1.default)());
 process_1.default.on('SIGINT', function onSigint() {
     console.log('SIGINT signal received: closing HTTP server');
     shutdown();
@@ -32,7 +34,7 @@ app.use(function (error, req, res, next) {
     console.log(error);
     res.sendStatus(400);
 });
-// app.all('/api/resources/*', [require('./routes/routesGuard')]);
+app.all('/api/resources/*', [require('./routes/routesGuard')]);
 app.use('/', require('./routes'));
 // If no route is matched by now, it must be a 404
 app.use(function (req, res, next) {

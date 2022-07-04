@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
             (req.query && req.query.access_token) ||
             req.headers['x-access-token'] || "";
         if (!token) {
-            res.status(400).json({ status: "KO", message: "Invalid Token" });
+            res.status(403).json({ status: "KO", message: "Invalid Token" });
         }
         else {
             try {
@@ -25,7 +25,12 @@ module.exports = function (req, res, next) {
                 next();
             }
             catch (error) {
-                res.status(400).json(error);
+                if (error.status) {
+                    res.status(error.status).json(error);
+                }
+                else {
+                    res.status(401).json(error);
+                }
             }
         }
     });

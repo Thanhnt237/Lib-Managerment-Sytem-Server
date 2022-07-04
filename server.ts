@@ -3,12 +3,14 @@ import bodyParser from "body-parser";
 import process from "process";
 import morgan from 'morgan'
 import compression from "compression";
+import cors from 'cors'
 
 require('dotenv').config();
 const app = express();
 
 // Compress all HTTP responses
 app.use(compression());
+app.use(cors());
 
 process.on('SIGINT', function onSigint() {
     console.log('SIGINT signal received: closing HTTP server')
@@ -36,7 +38,7 @@ app.use(function(error: any, req: any, res:any, next: any) {
 });
 
 
-// app.all('/api/resources/*', [require('./routes/routesGuard')]);
+app.all('/api/resources/*', [require('./routes/routesGuard')]);
 
 app.use('/', require('./routes'));
 

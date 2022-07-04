@@ -223,7 +223,7 @@ function genUpdateQuery(tableName, data, condition) {
     }
     sql = sql.slice(0, sql.length - 1);
     sql += ` where ${conditionArr.join("AND")};`;
-    if (typeof data === "object")
+    if (typeof data !== "object" || !Object.keys(data).length)
         return "";
     return sql;
 }
