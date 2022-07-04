@@ -32,14 +32,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.suaPhongDoc = exports.themPhongDoc = exports.layPhongDoc = void 0;
+exports.suaPhongDoc = exports.themPhongDoc = exports.layChiTietPhongDoc = exports.layDSPhongDoc = void 0;
 const phongDocService = __importStar(require("../service/phong_doc.service"));
-function layPhongDoc(req, res) {
+function layDSPhongDoc(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.json(yield phongDocService.layPhongDoc(req.body));
+        res.json(yield phongDocService.layPhongDSDoc(req.body));
     });
 }
-exports.layPhongDoc = layPhongDoc;
+exports.layDSPhongDoc = layDSPhongDoc;
+function layChiTietPhongDoc(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        res.json(yield phongDocService.layChiTietPhongDoc(req.body));
+    });
+}
+exports.layChiTietPhongDoc = layChiTietPhongDoc;
 function themPhongDoc(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         res.json(yield phongDocService.themPhongDoc(req.body));

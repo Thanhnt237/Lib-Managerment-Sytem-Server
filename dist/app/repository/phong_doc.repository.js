@@ -38,10 +38,17 @@ const tablename_1 = require("../../config/tablename");
 const logger = __importStar(require("winston"));
 function layPhongDoc(input) {
     return __awaiter(this, void 0, void 0, function* () {
+        let { PHONG_DOC_ID = '' } = input;
+        let expandCondition = "";
+        if (PHONG_DOC_ID.trim()) {
+            expandCondition += ` and ID = '${PHONG_DOC_ID}'`;
+        }
         let sql = `
         select * 
         from ${tablename_1.TABLE_NAME.PHONG_DOC}
-        where !KHOA and TRANG_THAI;
+        where !KHOA and TRANG_THAI
+        ${expandCondition}
+        order by ID;
     `;
         console.log(sql);
         try {
@@ -74,14 +81,17 @@ exports.themPhongDoc = themPhongDoc;
 function suaPhongDoc(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let { data, condition } = input;
-        let sql = common.genUpdateQuery(tablename_1.TABLE_NAME.PHONG_DOC, data, condition);
+        let sql = "";
+        data.forEach((item) => {
+            sql += common.genUpdateQuery(tablename_1.TABLE_NAME.PHONG_DOC, item, condition);
+        });
         console.log(sql);
         try {
             yield common.query(sql);
             return { status: "OK", result: "OK" };
         }
         catch (error) {
-            logger.error(`themPhongDoc error : ${error.message}`);
+            logger.error(`suaPhongDoc error : ${error.message}`);
             return Object.assign(Object.assign({ status: "KO" }, error), { extension: error.message });
         }
     });

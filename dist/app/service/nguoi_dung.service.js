@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.suaNguoiDung = exports.themNguoiDung = exports.refreshToken = exports.dangNhap = exports.layChiTietNguoiDung = void 0;
+exports.suaNguoiDung = exports.themNguoiDung = exports.refreshToken = exports.dangNhap = exports.layDSNguoiDung = exports.layChiTietNguoiDung = void 0;
 const nguoiDungRepository = __importStar(require("../repository/nguoi_dung.repository"));
 const common = __importStar(require("../common/common_function"));
 const constants_1 = require("../common/constants");
@@ -44,6 +44,12 @@ function layChiTietNguoiDung(input) {
     });
 }
 exports.layChiTietNguoiDung = layChiTietNguoiDung;
+function layDSNguoiDung(input) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield nguoiDungRepository.layDSNguoiDung(input);
+    });
+}
+exports.layDSNguoiDung = layDSNguoiDung;
 function dangNhap(input) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -72,6 +78,7 @@ exports.dangNhap = dangNhap;
 function refreshToken(input) {
     return __awaiter(this, void 0, void 0, function* () {
         let { refresh_token } = input;
+        // console.log(input)
         try {
             common.check_data(input, ["refresh_token"], constants_1.constants.ERROR_CODE_EMPTY);
             let token = yield auth.refreshToken(refresh_token);
@@ -98,7 +105,8 @@ function themNguoiDung(input) {
             TEN_NGUOI_DUNG: "*",
             ROLE: "",
             USERNAME: "",
-            PASSWORD: ""
+            PASSWORD: "",
+            NGAY_KHOI_TAO: 0
         };
         data = data.map((c) => {
             return Object.assign(Object.assign({}, c), { ID: common.genID("", 20), NGAY_KHOI_TAO: (new Date()).getTime() });
@@ -121,7 +129,8 @@ function suaNguoiDung(input) {
             TEN_NGUOI_DUNG: "*",
             ROLE: "",
             USERNAME: "",
-            PASSWORD: ""
+            PASSWORD: "",
+            TRANG_THAI: true
         };
         try {
             let standardData = yield common.validFragment([input], nguoiDungInputStandard);

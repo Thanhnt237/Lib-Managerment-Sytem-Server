@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.suaNguoiDung = exports.themNguoiDung = exports.refreshToken = exports.dangNhap = exports.layChiTietNguoiDung = void 0;
+exports.suaNguoiDung = exports.themNguoiDung = exports.refreshToken = exports.dangNhap = exports.layDSNguoiDung = exports.layChiTietNguoiDung = void 0;
 const nguoiDungService = __importStar(require("../service/nguoi_dung.service"));
 function layChiTietNguoiDung(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,14 +40,22 @@ function layChiTietNguoiDung(req, res) {
     });
 }
 exports.layChiTietNguoiDung = layChiTietNguoiDung;
+function layDSNguoiDung(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        res.json(yield nguoiDungService.layDSNguoiDung(req.body));
+    });
+}
+exports.layDSNguoiDung = layDSNguoiDung;
 function dangNhap(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log(await nguoiDungService.dangNhap(req.body))
         res.json(yield nguoiDungService.dangNhap(req.body));
     });
 }
 exports.dangNhap = dangNhap;
 function refreshToken(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        // console.log(req.body)
         res.json(yield nguoiDungService.refreshToken(req.body));
     });
 }

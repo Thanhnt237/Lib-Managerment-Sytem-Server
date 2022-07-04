@@ -43,15 +43,14 @@ const tablename_1 = require("../config/tablename");
 const common = __importStar(require("../app/common/common_function"));
 function verifyToken(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        token = token.split(' ')[1];
         try {
             let payload = jsonwebtoken_1.default.verify(token, constants_1.constants.ACCESS_TOKEN_SECRET);
             // console.log(payload)
             if (!payload) {
-                throw { message: "Invalid token", error_code: constants_1.constants.ERROR_CODE_INVALID_VALUE };
+                throw { status: 403, message: "Invalid token", error_code: constants_1.constants.ERROR_CODE_INVALID_VALUE };
             }
             if (!payload.user) {
-                throw { message: "Invalid token", error_code: constants_1.constants.ERROR_CODE_INVALID_VALUE };
+                throw { status: 403, message: "Invalid token", error_code: constants_1.constants.ERROR_CODE_INVALID_VALUE };
             }
             return payload.user;
         }
